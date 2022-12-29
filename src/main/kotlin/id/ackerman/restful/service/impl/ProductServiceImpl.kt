@@ -3,14 +3,17 @@ package id.ackerman.restful.service.impl
 import id.ackerman.restful.entity.Product
 import id.ackerman.restful.error.NotFoundException
 import id.ackerman.restful.model.CreateProductRequest
+import id.ackerman.restful.model.ListProductRequest
 import id.ackerman.restful.model.ProductResponse
 import id.ackerman.restful.model.UpdateProductRequest
 import id.ackerman.restful.repository.ProductRepository
 import id.ackerman.restful.service.ProductService
 import id.ackerman.restful.validation.ValidationUtil
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.util.*
+import java.util.stream.Collectors
 
 // implementasi dari ProductService
 
@@ -40,6 +43,7 @@ class ProductServiceImpl(
     override fun get(id: String): ProductResponse {
 
         val product = findProductByIdOrThrowNotFound(id) // jadi klo product nya tidak ada dari id tersebut maka return null\
+
         return convertProductToResponse(product)
     }
 
@@ -66,6 +70,14 @@ class ProductServiceImpl(
         val product = findProductByIdOrThrowNotFound(id)
         repository.delete(product)
 
+    }
+
+    override fun list(request: ListProductRequest): List<ProductResponse> {
+
+        val page = repository.findAll(PageRequest.of(request.page, request.size))
+        val products: List<Product> = page.get().collect(Collectors.toList())
+
+        return products.map { convertProductToResponse(it) }
     }
 
     private fun findProductByIdOrThrowNotFound(id: String): Product {
