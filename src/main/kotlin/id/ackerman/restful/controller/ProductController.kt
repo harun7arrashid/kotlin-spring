@@ -5,12 +5,14 @@ import id.ackerman.restful.model.ProductResponse
 import id.ackerman.restful.model.UpdateProductRequest
 import id.ackerman.restful.model.WebResponse
 import id.ackerman.restful.service.ProductService
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
+import javax.jws.WebService
 
 @RestController // untuk nandain klo ini RESTful API
 class ProductController(val service: ProductService) {
@@ -60,5 +62,15 @@ class ProductController(val service: ProductService) {
             "OK",
             response
         )
+    }
+
+    @DeleteMapping(
+        value = ["/api/products/{idProduct}"],
+        produces = ["application/json"],
+    )
+    fun deleteProduct(@PathVariable("idProduct") id: String): WebResponse<String> {
+        service.delete(id)
+
+        return WebResponse(code = 200, status = "OK", id)
     }
 }

@@ -12,4 +12,6 @@ interface ProductService {
 
     fun update(id: String, request: UpdateProductRequest): ProductResponse
 
+    fun delete(id: String)
+
 }
