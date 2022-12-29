@@ -7,4 +7,5 @@ interface ProductService {
 
     fun create(request: CreateProductRequest): ProductResponse
 
+    fun get(id: String) : ProductResponse
 }

@@ -1,0 +1,10 @@
+POST http://localhost:8080/api/products
+Content-Type: application/json
+Accept: application/json
+
+{
+    "id" : "A001",
+    "name": "Macbook Pro 2015",
+    "price": 30000000,
+    "quantity": 10
+}
