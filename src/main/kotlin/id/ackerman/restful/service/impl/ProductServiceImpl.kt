@@ -4,6 +4,7 @@ import id.ackerman.restful.entity.Product
 import id.ackerman.restful.error.NotFoundException
 import id.ackerman.restful.model.CreateProductRequest
 import id.ackerman.restful.model.ProductResponse
+import id.ackerman.restful.model.UpdateProductRequest
 import id.ackerman.restful.repository.ProductRepository
 import id.ackerman.restful.service.ProductService
 import id.ackerman.restful.validation.ValidationUtil
@@ -44,6 +45,24 @@ class ProductServiceImpl(
         else {
             return convertProductToResponse(product)
         }
+    }
+
+    override fun update(id: String, request: UpdateProductRequest): ProductResponse {
+
+        val product = repository.findByIdOrNull(id) ?: throw NotFoundException()
+
+        validationUtil.validate(request)
+
+        product.apply {
+            name     = request.name!!
+            price    = request.price!! // ini knp dibiarin null aja klo misal null, soalnya biar nanti bisa masuk ek exception
+            quantity = request.quantity!!
+            updateAt = Date()
+        }
+
+        repository.save(product)
+
+        return convertProductToResponse(product)
     }
 
     private fun convertProductToResponse(product: Product): ProductResponse =
