@@ -1,6 +1,7 @@
 package id.ackerman.restful.controller
 
 import id.ackerman.restful.error.NotFoundException
+import id.ackerman.restful.error.UnauthorizedException
 import id.ackerman.restful.model.WebResponse
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -26,5 +27,13 @@ class ErrorController {
             404,
             "NOT FOUND",
             "Not Found"
+        )
+
+    @ExceptionHandler(value = [UnauthorizedException::class])
+    fun unauthorized(exception: UnauthorizedException): WebResponse<String> =
+        WebResponse(
+            401,
+            "UNAUTHORIZED",
+            "Please put your X-Api-Key"
         )
 }
